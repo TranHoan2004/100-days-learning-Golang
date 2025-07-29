@@ -12,8 +12,8 @@ type Word struct {
 	Name string
 }
 
-func NewWord(name string) *Word {
-	return &Word{
+func NewWord(name string) Word {
+	return Word{
 		ID:   uuid.New(),
 		Name: name,
 	}
