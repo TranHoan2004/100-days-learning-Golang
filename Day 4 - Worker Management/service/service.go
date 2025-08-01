@@ -5,6 +5,7 @@ import (
 	"Day_3_-_Worker_Management/utils"
 	"container/list"
 	"errors"
+	"fmt"
 )
 
 var listOfWorkers = list.New()
@@ -13,7 +14,11 @@ func CreateWorker() error {
 	name, _ := utils.GetStringByRegex("Enter name: ", "", "")
 	workLocation, _ := utils.GetStringByRegex("Enter location: ", "", "")
 	age, _ := utils.GetInt("Enter age: ", "Age must be between 18 and 50", 18, 50)
-	salary, _ := utils.GetDouble("Enter salary: ", "Salary must be at least 10 million VND", 1000000, 100000000)
+	salary, err := utils.GetDouble("Enter salary: ", "Salary must be at least 10 million VND", 1000000, 100000000)
+
+	if err != nil {
+		fmt.Println(err)
+	}
 
 	worker := model.NewWorker(name, age, salary, workLocation)
 
@@ -21,7 +26,7 @@ func CreateWorker() error {
 		return errors.New("this worker is existing")
 	}
 
-	listOfWorkers.PushBack(worker)
+	listOfWorkers.PushBack(&worker)
 	return nil
 }
 
@@ -46,12 +51,16 @@ func UpdateSalary(signal bool) error {
 
 func HasWorker(w model.Worker) bool {
 	for e := listOfWorkers.Front(); e != nil; e = e.Next() {
-		worker := e.Value.(model.Worker)
+		worker := e.Value.(*model.Worker)
 		if w.GetName() == worker.GetName() && w.GetAge() == worker.GetAge() && w.GetWorkLocation() == worker.GetWorkLocation() {
 			return true
 		}
 	}
 	return false
+}
+
+func GetAllWorkers() list.List {
+	return *listOfWorkers
 }
 
 func FindWorker(id string) *model.Worker {

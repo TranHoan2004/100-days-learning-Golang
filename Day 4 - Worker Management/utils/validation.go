@@ -17,7 +17,7 @@ func RemoveUnnecessaryBlank(input string) string {
 }
 
 func GetInt(message string, error string, min int, max int) (int, error) {
-	input, err := GetStringByRegex(message, "[0-9]*\\\\.?[0-9]+", error)
+	input, err := GetStringByRegex(message, "[0-9]+", error)
 	if err != nil {
 		return 0, err
 	}
@@ -34,7 +34,7 @@ func GetInt(message string, error string, min int, max int) (int, error) {
 }
 
 func GetDouble(message string, error string, min float32, max float32) (float32, error) {
-	input, err := GetStringByRegex(message, "[0-9]+", error)
+	input, err := GetStringByRegex(message, "[0-9]*\\.?[0-9]+", error)
 	if err != nil {
 		return 0, err
 	}
@@ -45,6 +45,7 @@ func GetDouble(message string, error string, min float32, max float32) (float32,
 	}
 
 	number := float32(numberRaw)
+	fmt.Println(number)
 
 	if number < min || number > max {
 		return 0, errors.New("out of range")
